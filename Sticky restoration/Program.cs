@@ -2,9 +2,13 @@
 {
     internal class Program
     {
+        public static byte windowY = 35, windowX = 79;
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.Load();
         }
     }
 }
