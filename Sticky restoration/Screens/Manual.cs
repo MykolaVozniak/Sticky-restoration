@@ -1,10 +1,21 @@
 ﻿namespace Sticky_restoration
 {
-    internal class Manual : Screen
+    class Manual : Screen
     {
         public void Load()
         {
             base.Load();
+            Console.ReadKey();
+        }
+
+        public Manual()
+        {
+            info = new string[]
+            { 
+                "1M", 
+                "2M", 
+                "3M", 
+            };
         }
     }
 }

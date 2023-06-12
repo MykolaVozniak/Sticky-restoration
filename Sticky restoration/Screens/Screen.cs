@@ -2,7 +2,7 @@
 
 namespace Sticky_restoration
 {
-    internal class Screen
+    abstract class Screen
     {
         protected string gameName, screenName;
         protected string[] info;
@@ -11,14 +11,14 @@ namespace Sticky_restoration
         protected byte windowX;
         protected byte windowY;
 
-        public int XCenter(string str)
+        public byte XCenter(string str)
         {
-            int center = (windowX - str.Length) / 2;
+            byte center = (byte)((windowX - str.Length) / 2);
             return center;
         }
-        public int YCenter(string[] str)
+        public byte YCenter(string[] str)
         {
-            int center = (windowY - (str.Length*2)) / 2;
+            byte center = (byte)((windowY - (str.Length*2)) / 2);
             return center;
         }
 
@@ -39,14 +39,13 @@ namespace Sticky_restoration
 
             if (isCentered)
             {
-                int j = 0;
+                byte j = 0;
                 foreach (string i in info)
                 {
                     Console.SetCursorPosition(XCenter(i), YCenter(info) + j);
                     Console.WriteLine($"{i}");
-                    j = j + 2;
+                    j = (byte)(j + 2);
                 }
-                
             }
             else
             {
