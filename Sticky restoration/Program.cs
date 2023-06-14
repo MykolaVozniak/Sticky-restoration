@@ -6,8 +6,13 @@
 
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
             MainMenu mainMenu = new MainMenu();
-            mainMenu.Load();
+            while (true)
+            {
+                mainMenu.Load();
+            }
+            
         }
     }
 }

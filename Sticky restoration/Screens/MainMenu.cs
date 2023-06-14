@@ -1,6 +1,6 @@
 ﻿namespace Sticky_restoration
 {
-    class MainMenu : Screen
+    public class MainMenu : Screen
     {
         Game game;
         Manual manual = new Manual();
@@ -31,21 +31,25 @@
                 case ConsoleKey.M:
                     manual.Load();
                     break;
+                case ConsoleKey.W:
+                    game = new Game(GameMode.Word);
+                    game.Load();
+                    break;
                 default:
                     break;
             }
-            Load();
         }
 
         public MainMenu()
         {
             screenName = "Main Menu";
-            info = new string[] 
+            screenText = new string[] 
             { 
                 "Play Classic Mode \t[P]",
                 "Play Hollow Mode \t[H]",
                 "Play Colorful Mode \t[C]",
                 "Play Shard Mode \t[S]",
+                "Play Word Mode \t[W]",
                 "Go to Manual \t[M]"
             };
         }

@@ -1,8 +1,8 @@
 ﻿namespace Sticky_restoration
 {
-    enum GameMode { Classic, Hollow, Colorful, Shard }
+    public enum GameMode { Classic, Hollow, Colorful, Shard, Word }
 
-    class Game : Screen
+    public class Game : Screen
     {
         GameModule game = new GameModule();
         PictureModule picture = new PictureModule();
@@ -23,7 +23,7 @@
         public Game()
         {
             gameMode = GameMode.Classic;
-            info = new string[] {};
+            screenText = new string[] {};
         }
     }
 }

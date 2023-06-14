@@ -1,6 +1,6 @@
 ﻿namespace Sticky_restoration
 {
-    internal class GameModule
+    public class GameModule
     {
     }
 }

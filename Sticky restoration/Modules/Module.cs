@@ -1,6 +1,7 @@
 ﻿namespace Sticky_restoration
 {
-    internal class Module
+    public class Module
     {
+
     }
 }
