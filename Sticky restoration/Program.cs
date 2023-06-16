@@ -15,18 +15,26 @@ namespace Sticky_restoration
             windowY: 35,
             windowColor: ConsoleColor.Green,
 
-            frameMargin: 5,
+            frameMargin: 1,
             FrameThickness: 1,
             frameTexture: '▓', //░▒▓█
-            frameColor: ConsoleColor.Black,
+            frameColor: ConsoleColor.Red,
 
             isSoundOn: false,
             soundFrequency: 200,
             soundDuration: 130,
 
-            programName: "programName",
-            screenName: "screenName",
-            screenText: new string[] { "1 screenText", "2 screenText", "3 screenText" }
+            programName: "Sticky restoration",
+            screenName: "Main Menu",
+            screenText: new string[]
+            {
+                "Play Classic Mode \t[P]",
+                "Play Hollow Mode \t[H]",
+                "Play Colorful Mode \t[C]",
+                "Play Shard Mode \t[S]",
+                "Play Word Mode \t[W]",
+                "Go to Manual \t[M]"
+            }
             );
             while (true)
             {

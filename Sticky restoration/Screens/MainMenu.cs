@@ -42,7 +42,20 @@ namespace Sticky_restoration
             }
         }
 
-        public MainMenu(int windowX, int windowY, ConsoleColor windowColor, byte frameMargin, byte FrameThickness, char frameTexture, ConsoleColor frameColor, bool isSoundOn, int soundFrequency, int soundDuration, string programName, string screenName, string[] screenText)
+        public MainMenu(
+            int windowX = 79, 
+            int windowY = 79, 
+            ConsoleColor windowColor = ConsoleColor.Black, 
+            byte frameMargin = 1, 
+            byte FrameThickness = 1, 
+            char frameTexture = '▓', 
+            ConsoleColor frameColor = ConsoleColor.White, 
+            bool isSoundOn = false, 
+            int soundFrequency = 200, 
+            int soundDuration = 130, 
+            string programName = "programName", 
+            string screenName = "screenName", 
+            string[] screenText = null)
         : base(windowX, windowY, windowColor, frameMargin, FrameThickness, frameTexture, frameColor, isSoundOn, soundFrequency, soundDuration, programName, screenName, screenText)
         {
         }

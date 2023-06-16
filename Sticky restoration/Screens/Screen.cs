@@ -11,10 +11,9 @@ namespace Sticky_restoration
 
         //Frame
         protected byte frameMargin;
-        protected byte FrameThickness;
+        protected byte frameThickness;
         protected char frameTexture;
         protected ConsoleColor frameColor;
-        
 
         //Sound
         protected bool isSoundOn;
@@ -43,10 +42,11 @@ namespace Sticky_restoration
         private void DrawFrame()
         {
             Console.ForegroundColor = frameColor;
+            Console.BackgroundColor = windowColor;
 
             for (int i = 0; i < windowY; i++)
-            {  
-                    Console.WriteLine($"{new string(' ', windowX)}"); 
+            {
+                Console.WriteLine($"{new string(' ', windowX)}");
             }
 
             for (int i = frameMargin; i < windowY - frameMargin; i++)
@@ -55,13 +55,32 @@ namespace Sticky_restoration
                 Console.WriteLine($"{new string(frameTexture, windowX - frameMargin*2)}");
             }
 
-            for (int i = (frameMargin + FrameThickness); i < windowY - (frameMargin + FrameThickness); i++)
+            for (int i = (frameMargin + frameThickness); i < windowY - (frameMargin + frameThickness); i++)
             {
-                Console.SetCursorPosition((frameMargin + FrameThickness), i);
-                Console.WriteLine($"{new string(' ', windowX - (frameMargin + FrameThickness) * 2)}");
+                Console.SetCursorPosition((frameMargin + frameThickness), i);
+                Console.WriteLine($"{new string(' ', windowX - (frameMargin + frameThickness) * 2)}");
             }
 
             Console.SetCursorPosition(0, 0);
+            Console.ResetColor();
+        }
+
+        private void DrawText()
+        {
+            Console.BackgroundColor = windowColor;
+            Console.SetCursorPosition(XCenter(programName) - 1, 1);
+            Console.WriteLine($" {programName} ");
+
+            Console.SetCursorPosition(XCenter(screenName) - 1, 3);
+            Console.WriteLine($" {screenName} ");
+
+            byte j = 0;
+            foreach (string i in screenText)
+            {
+                Console.SetCursorPosition(XCenter(i), YCenter(screenText) + j);
+                Console.WriteLine($"{i}");
+                j = (byte)(j + 2);
+            }
         }
 
         public void Load()
@@ -76,24 +95,8 @@ namespace Sticky_restoration
             Console.SetWindowSize(windowX, windowY);
             Console.SetCursorPosition(0, 0);
 
-            Console.BackgroundColor = windowColor;
-
-
             DrawFrame();
-
-            Console.SetCursorPosition(XCenter(programName) - 1, 1);
-            Console.WriteLine($" {programName} ");
-
-            Console.SetCursorPosition(XCenter(screenName), 3);
-            Console.WriteLine($"{screenName}");
-
-            byte j = 0;
-            foreach (string i in screenText)
-            {
-                Console.SetCursorPosition(XCenter(i), YCenter(screenText) + j);
-                Console.WriteLine($"{i}");
-                j = (byte)(j + 2);
-            }
+            DrawText();
         }
 
         public Screen()
@@ -119,8 +122,8 @@ namespace Sticky_restoration
             screenText = new string[] { "1 screenText", "2 screenText", "3 screenText" };
         }
 
-        public Screen(int windowX, int windowY, ConsoleColor windowColor, byte frameMargin, byte FrameThickness, char frameTexture, ConsoleColor frameColor, bool isSoundOn, int soundFrequency, int soundDuration, string programName, string screenName, string[] screenText) 
-            : this()
+        public Screen(int windowX = 79, int windowY = 79, ConsoleColor windowColor = ConsoleColor.Black, byte frameMargin = 1, byte FrameThickness = 1, char frameTexture = '▓', ConsoleColor frameColor = ConsoleColor.White, bool isSoundOn = false, int soundFrequency = 200, int soundDuration = 130, string programName = "programName", string screenName = "screenName", string[] screenText = null)
+        :this()
         {
             //Window
             this.windowX = (windowX > Console.WindowWidth && windowX < Console.LargestWindowWidth) ? windowX : 79;
@@ -129,7 +132,7 @@ namespace Sticky_restoration
 
             //Frame
             this.frameMargin = frameMargin;
-            this.FrameThickness = FrameThickness;
+            this.frameThickness = FrameThickness;
             this.frameTexture = frameTexture;
             this.frameColor = frameColor;
 
@@ -139,9 +142,17 @@ namespace Sticky_restoration
             this.soundDuration = (soundDuration >= 10 && soundDuration <= 5000) ?  soundDuration : 130;
 
             //Text
-            this.programName = programName;
-            this.screenName = screenName;
-            this.screenText = screenText;
+            this.programName = (programName == null || programName.Length >= windowX) ? "programName" : programName;
+            this.screenName = (screenName == null || screenName.Length >= windowX) ? "screenName" : screenName;
+            this.screenText = screenText ?? new string[] { "1 screenText", "2 screenText", "3 screenText" };
+
+            for(int i = 0; i < screenText.Length; i++)
+            {
+                if (screenText[i] == null || screenText[i].Length >= windowX)
+                {
+                    screenText[i] = $"{i + 1} screenText";
+                }
+            }
         }
     }
 }
