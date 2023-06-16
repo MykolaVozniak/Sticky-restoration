@@ -42,9 +42,10 @@ namespace Sticky_restoration
             }
         }
 
-        public MainMenu(
+        public MainMenu
+            (
             int windowX = 79, 
-            int windowY = 79, 
+            int windowY = 35, 
             ConsoleColor windowColor = ConsoleColor.Black, 
             byte frameMargin = 1, 
             byte FrameThickness = 1, 
@@ -55,23 +56,10 @@ namespace Sticky_restoration
             int soundDuration = 130, 
             string programName = "programName", 
             string screenName = "screenName", 
-            string[] screenText = null)
+            string[] screenText = null
+            )
         : base(windowX, windowY, windowColor, frameMargin, FrameThickness, frameTexture, frameColor, isSoundOn, soundFrequency, soundDuration, programName, screenName, screenText)
         {
-        }
-
-        public MainMenu()
-        {
-            screenName = "Main Menu";
-            screenText = new string[]
-            {
-                "Play Classic Mode \t[P]",
-                "Play Hollow Mode \t[H]",
-                "Play Colorful Mode \t[C]",
-                "Play Shard Mode \t[S]",
-                "Play Word Mode \t[W]",
-                "Go to Manual \t[M]"
-            };
         }
     }
 }

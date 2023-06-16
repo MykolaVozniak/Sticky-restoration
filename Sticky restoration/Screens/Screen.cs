@@ -122,8 +122,23 @@ namespace Sticky_restoration
             screenText = new string[] { "1 screenText", "2 screenText", "3 screenText" };
         }
 
-        public Screen(int windowX = 79, int windowY = 79, ConsoleColor windowColor = ConsoleColor.Black, byte frameMargin = 1, byte FrameThickness = 1, char frameTexture = '▓', ConsoleColor frameColor = ConsoleColor.White, bool isSoundOn = false, int soundFrequency = 200, int soundDuration = 130, string programName = "programName", string screenName = "screenName", string[] screenText = null)
-        :this()
+        public Screen
+            (
+            int windowX = 79, 
+            int windowY = 35, 
+            ConsoleColor windowColor = ConsoleColor.Black, 
+            byte frameMargin = 1, 
+            byte FrameThickness = 1, 
+            char frameTexture = '▓', 
+            ConsoleColor frameColor = 
+            ConsoleColor.White, 
+            bool isSoundOn = false, 
+            int soundFrequency = 200, 
+            int soundDuration = 130, 
+            string programName = "programName", 
+            string screenName = "screenName", 
+            string[] screenText = null
+            )
         {
             //Window
             this.windowX = (windowX > Console.WindowWidth && windowX < Console.LargestWindowWidth) ? windowX : 79;
