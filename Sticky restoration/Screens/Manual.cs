@@ -8,14 +8,5 @@
             Console.ReadKey();
         }
 
-        public Manual()
-        {
-            screenText = new string[]
-            { 
-                "1M", 
-                "2M", 
-                "3M", 
-            };
-        }
     }
 }

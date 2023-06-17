@@ -16,7 +16,7 @@ namespace Sticky_restoration
             windowColor: ConsoleColor.Green,
 
             frameMargin: 1,
-            FrameThickness: 1,
+            frameThickness: 1,
             frameTexture: '▓', //░▒▓█
             frameColor: ConsoleColor.Red,
 

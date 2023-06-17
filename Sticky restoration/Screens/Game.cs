@@ -2,44 +2,129 @@
 
 namespace Sticky_restoration
 {
-    public enum GameMode { Classic, Hollow, Colorful, Shard, Word }
+    //public enum GameMode { Classic, Hollow, Colorful, Shard, Word }
 
     public class Game : Screen
     {
         GameMode gameMode;
 
         private const sbyte emptyCell = 0;
-        private static readonly sbyte[] pieceCells = { 1, 3, 5, 7, 9 };
-        private static readonly sbyte[] figureCells = { 2, 4, 6, 8, 10 };
+        private const sbyte pieceCell = 1;
+        private const sbyte figureCell = 2;
         private const sbyte borderCell = -1;
         private const sbyte sawCell = -2;
 
-        private sbyte[,] rawMatrix;
+        private sbyte[,] backMatrix;
+        private int matrixX;
+        private int matrixY;
 
-        private sbyte[,] GameMatrixGenerate()
+        ConsoleKey move = ConsoleKey.D;
+
+
+        private void GenerateMatrix()
         {
-            for (int i = 0; i < 20; i++)
+            backMatrix = new sbyte[matrixY,matrixX];
+            for (int i = 0; i < matrixY; i++)
             {
-                for (int j = 0; j < 20; j++)
+                for (int j = 0; j < matrixX; j++)
                 {
-                    rawMatrix[i, j] = emptyCell;
+                    if (i == 0 || i == matrixY - 1 || j == 0 || j == matrixX - 1)
+                    {
+                        backMatrix[i, j] = borderCell;
+                    }
+                    else
+                    {
+                        backMatrix[i, j] = emptyCell;
+                    }  
                 }
-
             }
 
-            for (int i = 0; i < 20; i++)
+        }
+
+        private void CreatePlayer()
+        {
+            Random random = new Random();
+            int figureCellX = random.Next(matrixX / 3, matrixX - matrixX / 3);
+            int figureCellY = random.Next(matrixY / 3, matrixY - matrixY / 3);
+            backMatrix[figureCellY, figureCellX] = figureCell;
+        }
+
+        private void PieceGenerate()
+        {
+            Random random = new Random();
+            int pieceCellX = random.Next(matrixX / 5, matrixX - matrixX / 5);
+            int pieceCellY = random.Next(matrixY / 5, matrixY - matrixY / 5);
+            backMatrix[pieceCellY, pieceCellX] = pieceCell;
+        }
+
+        private void MatrixVisualize()
+        {
+            for (int i = 0; i < matrixY; i++)
             {
-                for (int j = 0; j < 20; j++)
+                Console.SetCursorPosition(frameMargin + 3, i + frameMargin + 4);
+                
+                for (int j = 0; j < matrixX; j++)
                 {
-                    if (i == 1 || i == 20 || j == 1 || j == 20)
+                    switch (backMatrix[i, j])
                     {
-                        rawMatrix[i, j] = borderCell;
+                        case borderCell:
+                            Console.Write("O");
+                            break;
+                        case emptyCell:
+                            Console.Write(".");
+                            break;
+                        case figureCell:
+                            Console.Write("X");
+                            break;
+                        default:
+                            break;
+                    }   
+                }
+                Console.WriteLine();   
+            }
+        }
+
+        private void FigureMove(ConsoleKey move)
+        {
+            for (int i = 1; i < matrixY-1; i++)
+            {
+                for (int j = 1; j < matrixX-1; j++)
+                {
+                    switch (move)
+                    {
+                        case ConsoleKey.A:
+
+                            backMatrix[i, j - 1] = backMatrix[i, j];
+                            break;
+                        case ConsoleKey.W:
+                            backMatrix[i - 1, j] = backMatrix[i, j];
+                            break;
+                        case ConsoleKey.D:
+                            backMatrix[i, j + 1] = backMatrix[i, j];
+                            break;
+                        case ConsoleKey.S:
+                            backMatrix[i + 1, j] = backMatrix[i, j];
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
+        }
 
-            return rawMatrix;
-
+        private void PlayGame()
+        {
+            while (true)
+            {
+                Thread.Sleep(1000);
+                MatrixVisualize();
+                FigureMove(move);
+                
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKey move = Console.ReadKey(true).Key;
+                }
+            }
         }
 
         public void Load()
@@ -47,23 +132,22 @@ namespace Sticky_restoration
             screenName = $"{gameMode} Mode";
             base.Load();
 
-            //GameMatrixGenerate();
-
-
-
+            GenerateMatrix();
+            CreatePlayer();
+            PlayGame();
 
             Console.ReadKey();
         }
 
-        public Game(GameMode gameMode)
+
+
+        public Game(GameMode gameMode = GameMode.Classic) : base()
         {
             this.gameMode = gameMode;
+            screenText = new string[] { };
+            matrixX = 35;
+            matrixY = 25;
         }
 
-        public Game()
-        {
-            gameMode = GameMode.Classic;
-            screenText = new string[] {};
-        }
     }
 }

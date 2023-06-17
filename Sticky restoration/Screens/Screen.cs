@@ -108,6 +108,7 @@ namespace Sticky_restoration
 
             //Frame
             frameMargin = 1;
+            frameThickness = 1;
             frameTexture = '▓'; //░▒▓█
             frameColor = ConsoleColor.White;
 
@@ -128,10 +129,9 @@ namespace Sticky_restoration
             int windowY = 35, 
             ConsoleColor windowColor = ConsoleColor.Black, 
             byte frameMargin = 1, 
-            byte FrameThickness = 1, 
+            byte frameThickness = 1, 
             char frameTexture = '▓', 
-            ConsoleColor frameColor = 
-            ConsoleColor.White, 
+            ConsoleColor frameColor = ConsoleColor.White, 
             bool isSoundOn = false, 
             int soundFrequency = 200, 
             int soundDuration = 130, 
@@ -147,7 +147,7 @@ namespace Sticky_restoration
 
             //Frame
             this.frameMargin = frameMargin;
-            this.frameThickness = FrameThickness;
+            this.frameThickness = frameThickness;
             this.frameTexture = frameTexture;
             this.frameColor = frameColor;
 

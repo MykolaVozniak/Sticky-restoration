@@ -4,7 +4,7 @@ namespace Sticky_restoration
 {
     public class MainMenu : Screen
     {
-        Game game;
+        GGame game;
         Manual manual = new Manual();
 
         public void Load()
@@ -15,26 +15,26 @@ namespace Sticky_restoration
             switch (moveTo)
             {
                 case ConsoleKey.P:
-                    game = new Game(GameMode.Classic);
+                    game = new GGame();
                     game.Load();
                     break;
                 case ConsoleKey.H:
-                    game = new Game(GameMode.Hollow);
+                    game = new GGame();
                     game.Load();
                     break;
                 case ConsoleKey.C:
-                    game = new Game(GameMode.Colorful);
+                    game = new GGame();
                     game.Load();
                     break;
                 case ConsoleKey.S:
-                    game = new Game(GameMode.Shard);
+                    game = new GGame();
                     game.Load();
                     break;
                 case ConsoleKey.M:
                     manual.Load();
                     break;
                 case ConsoleKey.W:
-                    game = new Game(GameMode.Word);
+                    game = new GGame();
                     game.Load();
                     break;
                 default:
@@ -48,7 +48,7 @@ namespace Sticky_restoration
             int windowY = 35, 
             ConsoleColor windowColor = ConsoleColor.Black, 
             byte frameMargin = 1, 
-            byte FrameThickness = 1, 
+            byte frameThickness = 1, 
             char frameTexture = '▓', 
             ConsoleColor frameColor = ConsoleColor.White, 
             bool isSoundOn = false, 
@@ -58,7 +58,7 @@ namespace Sticky_restoration
             string screenName = "screenName", 
             string[] screenText = null
             )
-        : base(windowX, windowY, windowColor, frameMargin, FrameThickness, frameTexture, frameColor, isSoundOn, soundFrequency, soundDuration, programName, screenName, screenText)
+        : base(windowX, windowY, windowColor, frameMargin, frameThickness, frameTexture, frameColor, isSoundOn, soundFrequency, soundDuration, programName, screenName, screenText)
         {
         }
     }
