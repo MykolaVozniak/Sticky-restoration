@@ -1,9 +1,8 @@
-﻿using System.Drawing;
+﻿using Sticky_restoration;
 
 namespace Sticky_restoration
 {
-    public enum CellType { emptyCell, borderCell, sawCell }
-    public struct UniqueCell
+    public struct UniqueCell : ICell
     {
         public char Texture { get; set; }
         public ConsoleColor Color { get; set; }
