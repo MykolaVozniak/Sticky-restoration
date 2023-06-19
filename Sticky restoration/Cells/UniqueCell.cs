@@ -10,7 +10,7 @@ namespace Sticky_restoration
         public int X { get; set; }
         public int Y { get; set; }
 
-        bool isFigurePart;
+        public bool isFigurePart { get; set; }
 
         public void CellDraw()
         {
@@ -21,22 +21,25 @@ namespace Sticky_restoration
 
         public void Move(ConsoleKey move)
         {
-            switch (move)
+            if (isFigurePart)
             {
-                case ConsoleKey.A:
-                    X--;
-                    break;
-                case ConsoleKey.W:
-                    Y--;
-                    break;
-                case ConsoleKey.D:
-                    X++;
-                    break;
-                case ConsoleKey.S:
-                    Y++;
-                    break;
-                default:
-                    break;
+                switch (move)
+                {
+                    case ConsoleKey.A:
+                        X--;
+                        break;
+                    case ConsoleKey.W:
+                        Y--;
+                        break;
+                    case ConsoleKey.D:
+                        X++;
+                        break;
+                    case ConsoleKey.S:
+                        Y++;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

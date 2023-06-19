@@ -15,7 +15,7 @@ namespace Sticky_restoration
             switch (moveTo)
             {
                 case ConsoleKey.P:
-                    game = new GGame(windowColor : this.windowColor);
+                    game = new GGame();
                     game.Load();
                     break;
                 case ConsoleKey.H:

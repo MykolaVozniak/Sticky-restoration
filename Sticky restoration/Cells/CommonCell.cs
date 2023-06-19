@@ -12,7 +12,7 @@ internal class CommonCell : ICell
         Console.ResetColor();
     }
 
-    public CommonCell(char texture, ConsoleColor color)
+    public CommonCell(char texture = '█', ConsoleColor color = ConsoleColor.Blue)
     {
         Texture = texture;
         Color = color;

@@ -1,33 +1,27 @@
-﻿namespace Sticky_restoration
+﻿using System.Security.Cryptography;
+
+namespace Sticky_restoration
 {
     public enum GameMode { Classic, Hollow, Colorful, Shard, Word }
     public class GGame : Screen
     {
-        //--------------------------------------auto
+        int matrixX;
+        int matrixY;
+        int matrixXSpacing;
+
+        char[,] picture;
         int pictureX;
         int pictureY;
-
-        List<UniqueCell> uniqueCellArray = new List<UniqueCell>();
 
         ICell[,] pictureMatrix;
         ICell[,] gameMatrix;
 
-        int matrixSpacing;
-
-        //--------------------------------------constructor
-        char[,] picture;
-
         CommonCell borderCell;
         CommonCell emptinessCell;
-        // ??Cell saw;
+        //???Cell saw;
+        List<UniqueCell> spawnCellList = new List<UniqueCell>();
 
-        int matrixX;
-        int matrixY;
-
-        //Але в один масив вмонтовуємо пікчер, а другий пускаємо в гру.
-
-
-        public void DrawMatrix(ICell[,] matrix, int startDrawPoint)
+        private void DrawMatrix(ICell[,] matrix, int startDrawPoint)
         {
             for (int i = 0; i < matrixY; i++)
             {
@@ -40,7 +34,7 @@
             }
         }
 
-        public ICell[,] GenerateMatrix(ICell[,] matrix)
+        private ICell[,] GenerateMatrix(ICell[,] matrix)
         {
             matrix = new ICell[matrixY, matrixX];
             for (int i = 0; i < matrixY; i++)
@@ -57,10 +51,60 @@
                     }
                 }
             }
-
             return matrix;
         }
-        public void ExtractCells()
+
+        private ICell[,] GeneratePictureMatrix(ICell[,] matrix)
+        {
+            matrix = GenerateMatrix(matrix);
+            int startPointX = (matrixX - pictureX) / 2;
+            int startPointY = (matrixY - pictureY) / 2;
+            if (startPointX > 0 && startPointY > 0)
+            {
+                for (int i = 0; i < pictureY; i++)
+                {
+                    for (int j = 0; j < pictureX; j++)
+                    {
+                     matrix[i + startPointY, j + startPointX] = new UniqueCell(texture: picture[i, j], x: i + startPointY, y: i + startPointY, isFigurePart: true);
+                    }
+                }
+            }
+            return matrix;
+        }
+
+        private ICell[,] GenerateGameMatrix(ICell[,] matrix)
+        {
+            matrix = GenerateMatrix(matrix);
+            Random random = new Random();
+            int figureCellX = random.Next(matrixX / 3, matrixX - matrixX / 3);
+            int figureCellY = random.Next(matrixY / 3, matrixY - matrixY / 3);
+            matrix[figureCellY, figureCellX] = new UniqueCell(texture: spawnCellList[0].Texture, color:ConsoleColor.Yellow, x: figureCellX, y: figureCellY, isFigurePart: true);
+            return matrix;
+        }
+
+        private void UpdateGameMatrix()
+        {
+            for (int i = 0; i < matrixY; i++)
+            {
+                for (int j = 0; j < matrixX; j++)
+                {
+                    if (gameMatrix[i, j] == null)
+                    {
+                        gameMatrix[i, j] = emptinessCell;
+                    }
+                    if (gameMatrix[i, j] is UniqueCell && ((UniqueCell)gameMatrix[i, j]).isFigurePart)
+                    {
+                        gameMatrix[((UniqueCell)gameMatrix[i, j]).Y, ((UniqueCell)gameMatrix[i, j]).X] = gameMatrix[i, j];
+                    }
+                }
+            }
+            Random random = new Random();
+            int figureCellX = random.Next(matrixX / 5, matrixX - matrixX / 5);
+            int figureCellY = random.Next(matrixY / 5, matrixY - matrixY / 5);
+            gameMatrix[figureCellY, figureCellX] = new UniqueCell(texture: spawnCellList[0].Texture, x: figureCellX, y: figureCellY, isFigurePart: false);
+        }
+
+        private void ExtractCells()
         {
             pictureY = picture.GetLength(0);
             pictureX = picture.GetLength(1);
@@ -71,28 +115,45 @@
             {
                 for (int j = 0; j < pictureX; j++)
                 {
-                    if (picture[i,j] != emptinessCellIdentifier && picture[i, j] != borderCellIdentifire)
+                    if (!spawnCellList.Contains(new UniqueCell(texture: picture[i, j])) && picture[i,j] != emptinessCellIdentifier && picture[i, j] != borderCellIdentifire)
                     {
-                        uniqueCellArray.Add(new UniqueCell(texture: picture[i, j]));
+                        spawnCellList.Add(new UniqueCell(texture: picture[i, j]));
                     }
                 }
             }
-            
         }
 
-        public void LiteOutput()
+        private void PlayGame()
+        {
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKey move = Console.ReadKey(true).Key;
+                    foreach (var cell in gameMatrix)
+                    {
+                        if (cell is UniqueCell)
+                        {
+                            ((UniqueCell)cell).Move(move);
+                        }
+                    }
+                }
+                UpdateGameMatrix();
+                int startDrawPoint = matrixXSpacing;
+                DrawMatrix(gameMatrix, startDrawPoint);
+                Thread.Sleep(0);
+            }
+        }
+
+        private void LiteOutput()
         {
             Console.SetCursorPosition(0, 0);
-            for (int i = 0; i < uniqueCellArray.Count; i++)
+            for (int i = 0; i < spawnCellList.Count; i++)
             {
-                uniqueCellArray[i].CellDraw();
+                spawnCellList[i].CellDraw();
             }
-
-            int startDrawPoint = matrixSpacing;
-            DrawMatrix(gameMatrix, startDrawPoint);
-
-            startDrawPoint = matrixSpacing*2 + matrixX;
-            DrawMatrix(pictureMatrix, startDrawPoint);
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine(spawnCellList.Count);
         }
 
         public void Load()
@@ -100,10 +161,18 @@
             base.Load();
             ExtractCells();
 
-            pictureMatrix = GenerateMatrix(pictureMatrix);
-            gameMatrix = GenerateMatrix(gameMatrix);
+            pictureMatrix = GeneratePictureMatrix(pictureMatrix);
+            gameMatrix = GenerateGameMatrix(gameMatrix);
+
+            int startDrawPoint = matrixXSpacing;
+            DrawMatrix(gameMatrix, startDrawPoint);
+
+            startDrawPoint = matrixXSpacing * 2 + matrixX;
+            DrawMatrix(pictureMatrix, startDrawPoint);
 
             LiteOutput();
+
+            PlayGame();
 
             Console.ReadKey();
         }
@@ -112,43 +181,20 @@
         {
             picture = new char[,]
             {
-                { ' ',' ','D',' ',' '},
-                { ' ',' ','D',' ',' '},
-                { ' ','D','D','D',' '},
-                { ' ','D','D','D',' '},
-                { ' ','R','R','R',' '},
-                { ' ','E','E','E',' '},
-                { ' ','D','D','D',' '},
-                { 'D','D','D','D','D'},
+                { ' ','█','█',' ','█','█',' '},
+                { '█','█','█','█','█','█','█'},
+                { '█','█','█','█','█','█','█'},
+                { ' ','█','█','█','█','█',' '},
+                { ' ',' ','█','█','█',' ',' '},
+                { ' ',' ',' ','█',' ',' ',' '},
             };
 
-            borderCell = new CommonCell('O', ConsoleColor.Blue);
-            emptinessCell = new CommonCell(' ', ConsoleColor.Blue);
+            borderCell = new CommonCell('X'); //█ problem
+            emptinessCell = new CommonCell(' ');
 
             matrixX = 35;
             matrixY = 25;
-            matrixSpacing = (windowX - matrixX * 2) / 3;
+            matrixXSpacing = (windowX - matrixX * 2) / 3;
         }
-
-        public GGame
-            (
-            int windowX = 79,
-            int windowY = 35,
-            ConsoleColor windowColor = ConsoleColor.Black,
-            byte frameMargin = 1,
-            byte frameThickness = 1,
-            char frameTexture = '▓',
-            ConsoleColor frameColor = ConsoleColor.White,
-            bool isSoundOn = false,
-            int soundFrequency = 200,
-            int soundDuration = 130,
-            string programName = "programName",
-            string screenName = "screenName",
-            string[] screenText = null
-            )
-        : base(windowX, windowY, windowColor, frameMargin, frameThickness, frameTexture, frameColor, isSoundOn, soundFrequency, soundDuration, programName, screenName, screenText)
-        {
-        }
-
     }
 }
